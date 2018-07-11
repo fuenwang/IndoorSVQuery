@@ -22,7 +22,6 @@ def GetContent(link):
     return data
 
 def GetPano(ID):
-    print (ID)
     x_range = range(13)
     y_range = range(7)
     big = np.zeros([512*7, 512*13, 3], np.uint8)
@@ -41,11 +40,17 @@ def GetPano(ID):
     return big
 
 if __name__ == '__main__':
-    panoid = 'AF1QipNwQYLNrrw40mEdTMgf5Uxm6AG6U-GQvTvGX1_q'
-
-    img = GetPano(panoid)
-    img = cv2.resize(img, (2048, 1024), cv2.INTER_AREA)
-    img = cv2.resize(img, (1024, 512), cv2.INTER_AREA)
     
-    imsave('gg.png', img)
-
+    finish = []
+    lst = ['label1.txt', 'label2.txt']
+    for one in lst:
+        with open(one, 'r') as f:
+            for line in f:
+                panoid, angle = line[:-1].split(' ')
+                if panoid not in finish:
+                    print panoid
+                    img = img = GetPano(panoid)
+                    img = cv2.resize(img, (2048, 1024), cv2.INTER_AREA)
+                    #img = cv2.resize(img, (1024, 512), cv2.INTER_AREA)
+                    imsave('raw/%s.png'%panoid, img)
+                    finish.append(panoid)
